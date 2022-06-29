@@ -1,0 +1,26 @@
+{
+  "name": "@charrue/schema-table",
+  "version": "0.2.0",
+  "description": "基于vue2与element-ui,致力于简化中后台的table开发",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charrue/charrue-schema-table",
+    "directory": "packages/schema-table"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/index.min.js",
+  "scripts": {
+    "build": "vue2-bundler"
+  },
+  "devDependencies": {
+    "@charrue/schema-table-internal": "workspace:*",
+    "@charrue/vue2-bundler": "^0.0.6",
+    "vue": "2.6.14"
+  },
+  "peerDependencies": {
+    "element-ui": "*",
+    "vue": "2"
+  }
+}

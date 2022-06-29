@@ -1,0 +1,26 @@
+{
+  "name": "@charrue/schema-table-next",
+  "version": "0.2.0",
+  "description": "基于vue3与element-plus的表格组件封装",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charrue/charrue-schema-table",
+    "directory": "packages/schema-table-next"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/index.min.js",
+  "scripts": {
+    "build": "vue3-bundler"
+  },
+  "devDependencies": {
+    "@charrue/schema-table-internal": "workspace:*",
+    "@charrue/vue3-bundler": "^0.0.6",
+    "vue": "3.2.25"
+  },
+  "peerDependencies": {
+    "element-plus": "*",
+    "vue": "3"
+  }
+}
