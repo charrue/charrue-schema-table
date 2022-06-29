@@ -252,8 +252,8 @@ export default {
       prevSize: 0,
       startSelect: false,
       selectionData: {},
-      cachedSelectionData: [],
-      currentSelectionData: [],
+      cachedSelectionIndex: [],
+      currentPageSelectionIndex: {},
     };
   },
   computed: {
@@ -288,7 +288,7 @@ export default {
     this.proxyElTableEvents();
     this.prevSize = this.size;
     this.prevPage = this.page;
-    this.cachedSelectionData = [];
+    this.cachedSelectionIndex = [];
   },
   methods: {
     /**
@@ -298,18 +298,6 @@ export default {
       // 记录上一次的分页条数
       this.prevSize = this.size;
       this.$emit("size-change", size);
-
-      this.currentSelectionData.forEach((item) => {
-        const index = this.cachedSelectionData.findIndex(
-          (t) => t.__index__ === item.__index__
-        );
-        if (index === -1) {
-          this.cachedSelectionData.push(item);
-        } else {
-          this.cachedSelectionData.splice(index, 1);
-        }
-      });
-      this.currentSelectionData = [];
 
       if (this.shouldCacheSelection) {
         this.restoreSelection();
@@ -326,37 +314,21 @@ export default {
       this.$emit("update:page", page);
       this.$emit("page-change", page);
 
-      // this.cachedSelectionData = this.cachedSelectionData.concat(this.currentSelectionData)
-      this.currentSelectionData.forEach((item) => {
-        const index = this.cachedSelectionData.findIndex(
-          (t) => t.__index__ === item.__index__
-        );
-        if (index === -1) {
-          this.cachedSelectionData.push(item);
-        } else {
-          this.cachedSelectionData.splice(index, 1);
-        }
-      });
-      this.currentSelectionData = [];
-
       if (this.shouldCacheSelection) {
+        const indexes = Object.values(this.currentPageSelectionIndex).reduce(
+          (acc, cur) => {
+            acc = acc.concat(...cur);
+            return acc;
+          },
+          []
+        );
+        this.cachedSelectionIndex = [...new Set(indexes)];
+
         // 换到下一页时，如果下一页有之前选中过的数据，则将其选中
         this.restoreSelection();
       }
     },
     onCurrentPageChange(page) {
-      this.currentSelectionData.forEach((item) => {
-        const index = this.cachedSelectionData.findIndex(
-          (t) => t.__index__ === item.__index__
-        );
-        if (index === -1) {
-          this.cachedSelectionData.push(item);
-        } else {
-          this.cachedSelectionData.splice(index, 1);
-        }
-      });
-      this.currentSelectionData = [];
-
       this.$emit("update:page", page);
     },
     /**
@@ -377,7 +349,9 @@ export default {
      */
     onSelectionChange(currentSelections) {
       if (this.shouldCacheSelection) {
-        this.currentSelectionData = currentSelections;
+        this.currentPageSelectionIndex[this.page] = currentSelections.map(
+          (t) => t.__index__
+        );
       }
 
       this.$emit("selection-change", currentSelections);
@@ -388,11 +362,9 @@ export default {
      */
     restoreSelection() {
       this.$nextTick(() => {
-        this.tableData.forEach((row) => {
-          const index = this.cachedSelectionData.findIndex(
-            (t) => t.__index__ === row.__index__
-          );
-          if (index !== -1) {
+        this.tableData.forEach((row, index) => {
+          const has = this.cachedSelectionIndex.includes(row.__index__);
+          if (has) {
             this.$refs.elTableRef.toggleRowSelection(row, true);
           }
         });
