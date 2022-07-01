@@ -116,16 +116,17 @@
     <div class="charrue-schema-table-footer">
       <div
         v-if="pagination"
-        class="charrue-pagination-wrapper"
+        class="charrue-schema-table-pagination"
         :class="[pagination.class]"
         :style="pagination.style"
       >
         <el-pagination
           v-bind="typeof pagination === 'boolean' ? {} : pagination"
           :current-page="page"
-          :total="computedTotal"
+          :total="total"
           :page-size="size"
-          @update:current-page="onCurrentPageChange"
+          @update:current-page="onCurrentPageUpdate"
+          @update:size="onUpdateSize"
           @size-change="onSizeChange"
           @current-change="onPageChange"
           @prev-click="handlePaginationPrevClick"
@@ -149,44 +150,77 @@ export default {
     MultiColumn,
   },
   props: {
+    /**
+     * 表格行数据
+     * 通过el-table的`data` prop设置
+     */
     data: {
       type: Array,
       required: true,
     },
+    /**
+     * 表格列数据定义
+     */
     columns: {
       type: Array,
       required: true,
     },
-    /* el-table的props */
+    /**
+     * el-table的props
+     */
     tableProps: Object,
-    /* 如果是boolean，表示启用多选模式，如果是一个对象，表示多选列的props */
+    /**
+     * 如果是boolean，表示启用多选模式，如果是一个对象，表示多选列的props
+     */
     selection: [Boolean, Object],
-    /** 分页多选时，是否把非当前页选中的数据记录下来 */
+    /**
+     * 分页多选时，是否把非当前页选中的数据记录下来
+     */
     shouldCacheSelection: {
       type: Boolean,
       default: false,
     },
-    /* 如果是boolean，表示启用详细模式，如果是一个数组，表示详细区域需要展示的列 */
-    expand: [Array, Boolean],
-    /* 表格是否在加载中 */
-    loading: Boolean,
-    /* 加载效果的选项 */
-    loadingOptions: Object,
-    /* 详细区域的props */
-    expandOptions: Object,
     /**
-     * 扩展列表头
+     * 表格是否处于加载中状态
+     */
+    loading: Boolean,
+    /**
+     * 加载效果的选项
+     */
+    loadingOptions: Object,
+    /**
+     * 展开行的表头
+     * 如果字符串无法满足需求，可以使用`expand-header`插槽
      */
     expandHeader: {
       type: String,
     },
+    /**
+     * 展开行的 column props
+     */
     expandProps: {
       type: Object,
       default() {
         return {};
       },
     },
-    /* 额外的列的props */
+    /**
+     * 是否展示操作列
+     */
+    showExtraColumn: {
+      type: Boolean,
+      default: true,
+    },
+    /**
+     * 操作列的表头文案
+     */
+    extraColumnTitle: {
+      type: String,
+      default: "操作",
+    },
+    /**
+     * 操作列的 column props
+     */
     extraColumnProps: {
       type: Object,
       default() {
@@ -200,11 +234,14 @@ export default {
      */
     index: [Function, Boolean, Number],
     /**
-     * 索引列表头
+     * 索引列表头标题
      */
     indexHeader: {
       type: String,
     },
+    /**
+     * 索引列的props
+     */
     indexProps: {
       type: Object,
       default() {
@@ -212,34 +249,36 @@ export default {
       },
     },
     /**
-     * 自定义操作列的表头文案
+     * 设置分页功能
+     * 如果是true，则表示开启
+     * 如果是一个对象，则开启分页，并将其作为props应用到el-pagination组件上
      */
-    extraColumnTitle: {
-      type: String,
-      default: "操作",
-    },
-    /**
-     * 是否展示额外的列
-     */
-    showExtraColumn: {
-      type: Boolean,
-      default: true,
-    },
     pagination: [Boolean, Object],
+    /**
+     * 当前页数，支持 .sync 修饰符
+     * 默认是1
+     */
     page: {
       type: Number,
       default: 1,
     },
-    total: [Number, String],
+    /**
+     * 总条目数
+     */
+    total: Number,
+    /**
+     * 每页显示条目个数，支持 .sync 修饰符
+     * 默认是10
+     */
     size: {
       type: Number,
       default: 10,
     },
   },
   emits: [
-    "cell-mouse-leave",
-    "size-change",
     "update:page",
+    "update:size",
+    "size-change",
     "page-change",
     "prev-click",
     "next-click",
@@ -328,8 +367,11 @@ export default {
         this.restoreSelection();
       }
     },
-    onCurrentPageChange(page) {
+    onCurrentPageUpdate(page) {
       this.$emit("update:page", page);
+    },
+    onUpdateSize(size) {
+      this.$emit("update:size", size);
     },
     /**
      * @private
