@@ -283,6 +283,23 @@ export default {
     "prev-click",
     "next-click",
     "selection-change",
+    "select",
+    "select-all",
+    "selection-change",
+    "cell-mouse-enter",
+    "cell-mouse-leave",
+    "cell-click",
+    "cell-dblclick",
+    "row-click",
+    "row-contextmenu",
+    "row-dblclick",
+    "header-click",
+    "header-contextmenu",
+    "sort-change",
+    "filter-change",
+    "current-change",
+    "header-dragend",
+    "expand-change",
   ],
   data() {
     return {
@@ -396,7 +413,11 @@ export default {
         );
       }
 
-      this.$emit("selection-change", currentSelections);
+      this.$emit(
+        "selection-change",
+        currentSelections,
+        this.cachedSelectionIndex
+      );
     },
 
     /**
@@ -420,6 +441,7 @@ export default {
       const elTableEvents = [
         "select",
         "select-all",
+        "selection-change",
         "cell-mouse-enter",
         "cell-mouse-leave",
         "cell-click",
