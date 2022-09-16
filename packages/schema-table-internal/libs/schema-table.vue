@@ -14,8 +14,8 @@
           loadingOptions && loadingOptions.background
         "
         v-bind="tableProps"
-        @selection-change="onSelectionChange"
         v-on="events"
+        @selection-change="onSelectionChange"
       >
         <!-- 多选操作 -->
         <el-table-column
@@ -282,7 +282,6 @@ export default {
     "page-change",
     "prev-click",
     "next-click",
-    "selection-change",
     "select",
     "select-all",
     "selection-change",
@@ -308,8 +307,9 @@ export default {
       prevSize: 0,
       startSelect: false,
       selectionData: {},
-      cachedSelectionIndex: [],
       currentPageSelectionIndex: {},
+      cachedSelectionData: {},
+      pageOrSizeChanged: false,
     };
   },
   computed: {
@@ -337,6 +337,16 @@ export default {
     computedSlots() {
       return this.$slots;
     },
+    cachedSelectionIndex() {
+      if (this.shouldCacheSelection) {
+        return Object.values(this.cachedSelectionData)
+          .map((item) => {
+            return item.map((t) => t.__index__);
+          })
+          .flat(1);
+      }
+      return [];
+    },
   },
   created() {
     // 将el-table上的公开方法放到schema-table上
@@ -344,13 +354,14 @@ export default {
     this.proxyElTableEvents();
     this.prevSize = this.size;
     this.prevPage = this.page;
-    this.cachedSelectionIndex = [];
   },
   methods: {
     /**
      * @private 派发 el-pagination 的 size-change 事件
      */
     onSizeChange(size) {
+      this.pageOrSizeChanged = true;
+
       // 记录上一次的分页条数
       this.prevSize = this.size;
       this.$emit("size-change", size);
@@ -365,21 +376,14 @@ export default {
      * @private
      */
     onPageChange(page) {
+      this.pageOrSizeChanged = true;
+
       // 记录上一次的页码数
       this.prevPage = this.page;
       this.$emit("update:page", page);
       this.$emit("page-change", page);
 
       if (this.shouldCacheSelection) {
-        const indexes = Object.values(this.currentPageSelectionIndex).reduce(
-          (acc, cur) => {
-            acc = acc.concat(...cur);
-            return acc;
-          },
-          []
-        );
-        this.cachedSelectionIndex = [...new Set(indexes)];
-
         // 换到下一页时，如果下一页有之前选中过的数据，则将其选中
         this.restoreSelection();
       }
@@ -390,15 +394,9 @@ export default {
     onUpdateSize(size) {
       this.$emit("update:size", size);
     },
-    /**
-     * @private
-     */
     handlePaginationPrevClick(page) {
       this.$emit("prev-click", page);
     },
-    /**
-     * @private
-     */
     handlePaginationNextClick(page) {
       this.$emit("next-click", page);
     },
@@ -408,15 +406,20 @@ export default {
      */
     onSelectionChange(currentSelections) {
       if (this.shouldCacheSelection) {
-        this.currentPageSelectionIndex[this.page] = currentSelections.map(
-          (t) => t.__index__
-        );
+        // page改变后会触发`selection-change`事件
+        // 此场景下的`selection-change`的selection参数是空数组，所以不需要更新`cachedSelectionData`
+        if (this.pageOrSizeChanged) {
+          this.pageOrSizeChanged = false;
+        } else {
+          // 正常情况下需要记录selection
+          this.cachedSelectionData[this.page] = currentSelections;
+        }
       }
 
       this.$emit(
         "selection-change",
         currentSelections,
-        this.cachedSelectionIndex
+        this.cachedSelectionData
       );
     },
 
@@ -424,9 +427,10 @@ export default {
      * 恢复之前选中的行数据
      */
     restoreSelection() {
+      const cachedSelectionIndex = [].concat(this.cachedSelectionIndex);
       this.$nextTick(() => {
         this.tableData.forEach((row, index) => {
-          const has = this.cachedSelectionIndex.includes(row.__index__);
+          const has = cachedSelectionIndex.includes(row.__index__);
           if (has) {
             this.$refs.elTableRef.toggleRowSelection(row, true);
           }
@@ -441,7 +445,6 @@ export default {
       const elTableEvents = [
         "select",
         "select-all",
-        "selection-change",
         "cell-mouse-enter",
         "cell-mouse-leave",
         "cell-click",

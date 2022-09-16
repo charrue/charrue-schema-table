@@ -1,6 +1,6 @@
 {
   "name": "@charrue/schema-table",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "基于vue2与element-ui,致力于简化中后台的table开发",
   "repository": {
     "type": "git",

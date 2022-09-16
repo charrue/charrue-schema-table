@@ -18,9 +18,10 @@
       :total="100"
       :page="page"
       @page-change="onPageChange"
+      @selection-change="onSelectionChange"
     >
       <template #actions>
-        <el-button type="text">查看详情</el-button>
+        <el-button type="primary" link>查看详情</el-button>
       </template>
     </charrue-schema-table>
   </div>
@@ -39,6 +40,7 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.8)",
       },
+      page: 1,
     };
   },
   methods: {
@@ -49,6 +51,10 @@ export default {
     onPageChange(page) {
       this.page = page;
       this.data = createData(page);
+    },
+
+    onSelectionChange(currentSelections, cachedSelectionIndex) {
+      console.log(currentSelections, cachedSelectionIndex);
     },
   },
 };
