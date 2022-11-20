@@ -5,22 +5,22 @@
     </div>
     <charrue-schema-table
       ref="tableRef"
-      :loading="loading"
-      :loading-options="loadingOptions"
+      v-model:current-page="page"
+      v-model:page-size="size"
       :data="data"
       :columns="columns"
       selection
       index
       index-header="序号"
       :index-props="{ width: '70px' }"
-      pagination
+      :pagination="pagination"
       should-cache-selection
-      :total="100"
-      :page="page"
-      @page-change="onPageChange"
+      :total="total"
+      @current-change="onPageChange"
+      @size-change="onSizeChange"
       @selection-change="onSelectionChange"
     >
-      <template #actions>
+      <template #action>
         <el-button type="primary" link>查看详情</el-button>
       </template>
     </charrue-schema-table>
@@ -28,19 +28,24 @@
 </template>
 <script>
 import { createData, Columns } from "./data";
+
+const defaultData = createData(1);
+let size = 10;
+let page = 1;
 export default {
   name: "Case1Page",
   data() {
     return {
-      data: createData(1),
+      data: defaultData.slice(size * (page - 1), size * page),
+      total: defaultData.length,
       columns: Columns,
-      loading: false,
-      loadingOptions: {
-        text: "拼命加载中",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.8)",
+      pagination: {
+        "page-sizes": [10, 20, 30],
+        background: true,
+        layout: "sizes, prev, pager, next",
       },
       page: 1,
+      size: 10,
     };
   },
   methods: {
@@ -48,13 +53,20 @@ export default {
       this.loading = !this.loading;
     },
 
-    onPageChange(page) {
-      this.page = page;
-      this.data = createData(page);
+    onPageChange(p) {
+      this.page = p;
+      page = p;
+      this.data = defaultData.slice(size * (page - 1), size * page);
     },
 
-    onSelectionChange(currentSelections, cachedSelectionIndex) {
-      console.log(currentSelections, cachedSelectionIndex);
+    onSizeChange(s) {
+      this.size = s;
+      size = s;
+      this.data = defaultData.slice(size * (page - 1), size * page);
+    },
+
+    onSelectionChange(currentSelections, allSelections) {
+      console.log(currentSelections, allSelections);
     },
   },
 };

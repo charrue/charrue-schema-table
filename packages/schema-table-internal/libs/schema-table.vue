@@ -10,9 +10,7 @@
         :data="tableData"
         :element-loading-text="loadingOptions && loadingOptions.text"
         :element-loading-spinner="loadingOptions && loadingOptions.spinner"
-        :element-loading-background="
-          loadingOptions && loadingOptions.background
-        "
+        :element-loading-background="loadingOptions && loadingOptions.background"
         v-bind="tableProps"
         v-on="events"
         @selection-change="onSelectionChange"
@@ -25,33 +23,18 @@
         />
 
         <!-- 表格首列之前显示索引 -->
-        <el-table-column
-          v-if="index"
-          type="index"
-          :index="computedIndex"
-          v-bind="indexProps"
-        >
+        <el-table-column v-if="index" type="index" :index="computedIndex" v-bind="indexProps">
           <template #header>
             <span v-if="indexHeader">{{ indexHeader }}</span>
-            <slot
-              v-if="!indexHeader && computedSlots['index-header']"
-              name="index-header"
-            ></slot>
+            <slot v-if="!indexHeader && computedSlots['index-header']" name="index-header"></slot>
           </template>
         </el-table-column>
 
         <!-- 行展开 -->
-        <el-table-column
-          v-if="computedSlots['expand']"
-          type="expand"
-          v-bind="expandProps"
-        >
+        <el-table-column v-if="computedSlots['expand']" type="expand" v-bind="expandProps">
           <template #header>
             <span v-if="expandHeader">{{ expandHeader }}</span>
-            <slot
-              v-if="!expandHeader && computedSlots['extra-header']"
-              name="extra-header"
-            ></slot>
+            <slot v-if="!expandHeader && computedSlots['extra-header']" name="extra-header"></slot>
           </template>
           <template #default="props">
             <slot name="expand" :scope="props" />
@@ -142,6 +125,7 @@
 <script>
 import MultiColumn from "./multi-column.vue";
 import createCloneDeep from "rfdc";
+
 const cloneDeep = createCloneDeep();
 
 export default {
@@ -416,11 +400,7 @@ export default {
         }
       }
 
-      this.$emit(
-        "selection-change",
-        currentSelections,
-        this.cachedSelectionData
-      );
+      this.$emit("selection-change", currentSelections, this.cachedSelectionData);
     },
 
     /**

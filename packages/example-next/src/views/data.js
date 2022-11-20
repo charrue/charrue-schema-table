@@ -7,11 +7,11 @@ export const Columns = [
 ];
 
 export const createData = (page) => {
-  return Array.from({ length: 10 }).map((_, index) => {
+  return Array.from({ length: 40 }).map((_, index) => {
     return {
       id: (page - 1) * 10 + index,
       date: "2016-05-03",
-      name: `第${page}页第${index + 1}行`,
+      name: `第${index + 1}个数据`,
       province: "上海",
       city: "普陀区",
       address: "上海市普陀区金沙江路 1516 弄",
