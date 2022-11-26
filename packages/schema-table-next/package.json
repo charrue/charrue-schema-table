@@ -1,6 +1,6 @@
 {
   "name": "@charrue/schema-table-next",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "基于vue3与element-plus的表格组件封装",
   "repository": {
     "type": "git",
@@ -8,9 +8,10 @@
     "directory": "packages/schema-table-next"
   },
   "license": "MIT",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "unpkg": "dist/index.global.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
   "keywords": [
     "element-plus",
     "charrue",
