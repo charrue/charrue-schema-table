@@ -1,8 +1,14 @@
 import { ref, computed, defineComponent, h, nextTick } from "vue";
-import { ElTable, ElTableColumn, ElPagination } from "element-plus";
+import { ElTable, ElPagination } from "element-plus";
 import { schemaTableProps, TableData } from "./props";
-import MultiColumn from "./MultiColumn";
 import { usePropSync } from "./utils";
+import {
+  renderExpandColumn,
+  renderExtraColumn,
+  renderIndex,
+  renderSelection,
+  renderColumn,
+} from "./render-components";
 
 export const TABLE_INDEX_KEY = "__INDEX__";
 
@@ -217,172 +223,19 @@ const SchemaTable = defineComponent({
     };
   },
   render() {
-    const {
-      columns,
-      tableProps,
-      selection,
-      index,
-      indexHeader,
-      indexProps,
-      showExtraColumn,
-      extraColumnLabel,
-      extraColumnProps,
-      expandHeader,
-      expandProps,
-      pagination,
-      currentPage,
-      pageSize,
-      total,
-
-      indexColumnProps,
-      elTableEvents,
-      computedTableData,
-
-      onCurrentPageUpdate,
-      onPageSizeUpdate,
-      onSelectionChange,
-      onCurrentPageChange,
-      onPageSizeChange,
-      onPrevClick,
-      onNextClick,
-
-      $slots,
-    } = this;
-
-    const renderSelection = () => {
-      const columnProps = typeof selection === "boolean" ? {} : selection;
-      return selection
-        ? h(ElTableColumn, {
-            type: "selection",
-            ...(columnProps || {}),
-          })
-        : null;
-    };
-
-    const renderExpandColumn = () => {
-      return $slots.expand
-        ? h(
-            ElTableColumn,
-            {
-              ...(expandProps || {}),
-              type: "expand",
-            },
-            {
-              header: () => {
-                if (expandHeader) {
-                  return h("span", null, expandHeader);
-                }
-
-                if (!expandHeader && $slots["expand-header"]) {
-                  return $slots["expand-header"]?.();
-                }
-                return null;
-              },
-              default: (scope: any) => {
-                return $slots.expand ? $slots.expand?.(scope) : null;
-              },
-            },
-          )
-        : null;
-    };
-
-    const renderIndex = () => {
-      return index
-        ? h(
-            ElTableColumn,
-            {
-              type: "index",
-              index: indexColumnProps,
-              ...(indexProps || {}),
-            },
-            {
-              header: () => [
-                indexHeader ? h("span", null, indexHeader) : null,
-                $slots["index-header"] ? $slots["index-header"]() : null,
-              ],
-            },
-          )
-        : null;
-    };
-
-    const renderColumn = () => {
-      return columns.map((item, idx) => {
-        return h(
-          ElTableColumn,
-          {
-            label: item.label,
-            prop: item.prop,
-            key: `${item.prop}-${item.label}-${idx}`,
-            ...(item.uiProps || {}),
-          },
-          {
-            header: () => {
-              if (Array.isArray(item.children) && item.children.length > 0) {
-                return item.children.map((child, i) => {
-                  return h(MultiColumn, {
-                    key: `multi-column-${child.prop}-${i}`,
-                    label: child.label,
-                    prop: child.prop,
-                    uiProps: child.uiProps,
-                    children: child.children || [],
-                  });
-                });
-              }
-              const propHeaderKey = `header:${item.prop}`;
-              if ($slots[propHeaderKey]) {
-                return $slots[propHeaderKey]?.(item);
-              }
-
-              return h("span", null, item.label);
-            },
-            default: (scope: any) => {
-              return h(
-                "div",
-                {
-                  class: "cell-wrapper",
-                },
-                [$slots[item.prop] ? $slots[item.prop]?.() : h("span", null, scope.row[item.prop])],
-              );
-            },
-          },
-        );
-      });
-    };
-
-    const renderExtraColumn = () => {
-      return showExtraColumn
-        ? h(
-            ElTableColumn,
-            {
-              ...(extraColumnProps || {}),
-            },
-            {
-              header: () => {
-                return $slots["extra-column-header"]
-                  ? $slots["extra-column-header"]?.()
-                  : h("span", null, extraColumnLabel);
-              },
-              default: (scope: any) => {
-                return $slots.action ? $slots.action?.(scope) : null;
-              },
-            },
-          )
-        : null;
-    };
-
     return h(
       "div",
       {
         class: "charrue-schema-table-root",
       },
       [
-        $slots.header
+        this.$slots.header
           ? h(
               "div",
               {
                 class: "charrue-schema-table-header",
               },
-              [$slots.header()],
+              [this.$slots.header()],
             )
           : null,
 
@@ -396,23 +249,41 @@ const SchemaTable = defineComponent({
               ElTable,
               {
                 ref: "elTableRef",
-                data: computedTableData,
-                ...tableProps,
-                ...elTableEvents,
-                "onSelection-change": onSelectionChange,
+                data: this.computedTableData,
+                ...this.tableProps,
+                ...this.elTableEvents,
+                "onSelection-change": this.onSelectionChange,
               },
               {
                 default: () => {
                   return [
-                    renderSelection(),
-                    renderIndex(),
-                    renderExpandColumn(),
-                    renderColumn(),
-                    renderExtraColumn(),
+                    renderSelection(this.selection),
+                    renderIndex({
+                      index: this.index,
+                      indexProp: this.indexColumnProps,
+                      columnProps: this.indexProps,
+                      label: this.indexHeader,
+                      $slots: this.$slots,
+                    }),
+                    renderExpandColumn({
+                      label: this.expandHeader,
+                      props: this.expandProps,
+                      $slots: this.$slots,
+                    }),
+                    renderColumn({
+                      columns: this.columns,
+                      $slots: this.$slots,
+                    }),
+                    renderExtraColumn({
+                      showExtraColumn: this.showExtraColumn,
+                      label: this.extraColumnLabel,
+                      props: this.extraColumnProps,
+                      $slots: this.$slots,
+                    }),
                   ];
                 },
-                append: $slots.append,
-                empty: $slots.empty,
+                append: this.$slots.append,
+                empty: this.$slots.empty,
               },
             ),
           ],
@@ -424,7 +295,7 @@ const SchemaTable = defineComponent({
             class: "charrue-schema-table-footer",
           },
           [
-            pagination !== false
+            this.pagination !== false
               ? h(
                   "div",
                   {
@@ -433,16 +304,16 @@ const SchemaTable = defineComponent({
 
                   [
                     h(ElPagination, {
-                      currentPage,
-                      total,
-                      pageSize,
-                      "onUpdate:current-page": onCurrentPageUpdate,
-                      "onUpdate:page-size": onPageSizeUpdate,
-                      "onPrev-click": onPrevClick,
-                      "onNext-click": onNextClick,
-                      "onSize-change": onPageSizeChange,
-                      "onCurrent-change": onCurrentPageChange,
-                      ...(typeof pagination === "boolean" ? {} : pagination),
+                      currentPage: this.currentPage,
+                      total: this.total,
+                      pageSize: this.pageSize,
+                      "onUpdate:current-page": this.onCurrentPageUpdate,
+                      "onUpdate:page-size": this.onPageSizeUpdate,
+                      "onPrev-click": this.onPrevClick,
+                      "onNext-click": this.onNextClick,
+                      "onSize-change": this.onPageSizeChange,
+                      "onCurrent-change": this.onCurrentPageChange,
+                      ...(typeof this.pagination === "boolean" ? {} : this.pagination),
                     }),
                   ],
                 )
