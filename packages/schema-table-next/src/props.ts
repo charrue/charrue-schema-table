@@ -2,14 +2,17 @@ import { PropType } from "vue";
 import { ElTable, ElTableColumn, ElPagination } from "element-plus";
 
 type TableProps = Omit<InstanceType<typeof ElTable>["$props"], "data">;
+
 export type ElTableColumnProps = Omit<
   InstanceType<typeof ElTableColumn>["$props"],
   "label" | "prop"
 >;
+
 export type PaginationObjectProps = Omit<
   InstanceType<typeof ElPagination>["$props"],
   "current-page" | "page-size" | "total"
 >;
+
 export interface ColumnSchema {
   label: string;
   prop: string;
@@ -57,7 +60,7 @@ export const schemaTableProps = {
     },
   },
   expandHeader: {
-    type: Boolean,
+    type: String,
     default: "",
   },
   expandProps: {
@@ -126,3 +129,5 @@ export const multiColumnProps = {
     },
   },
 };
+
+export type SchemaTableProps = typeof schemaTableProps;
