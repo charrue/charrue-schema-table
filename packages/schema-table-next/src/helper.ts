@@ -1,6 +1,6 @@
 import { ColumnSchema, ElTableColumnProps } from "./props";
 
-export const createColumn = (
+export const createColumns = (
   configs: Array<[string, string, Partial<ElTableColumnProps>?]>,
 ): ColumnSchema[] => {
   return configs.map((t) => {
