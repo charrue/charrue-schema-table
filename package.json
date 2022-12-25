@@ -6,7 +6,8 @@
   "scripts": {
     "build:v2": "pnpm --filter=@charrue/schema-table run build",
     "build:v3": "pnpm --filter=@charrue/schema-table-next run build",
-    "start:v3": "pnpm --filter=example-next run dev"
+    "start:v3": "pnpm --filter=example-next run dev",
+    "docs": "pnpm --filter=docs run dev"
   },
   "license": "MIT",
   "devDependencies": {

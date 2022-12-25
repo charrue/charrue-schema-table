@@ -1,0 +1,22 @@
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "build": "vite build",
+    "deploy": "gh-pages -d ..vitepress/dist -t true",
+    "dev": "vitepress dev . --host"
+  },
+  "devDependencies": {
+    "@charrue/schema-table-next": "workspace:*",
+    "@ruabick/md-demo-plugins": "latest",
+    "@ruabick/vitepress-demo-block": "latest",
+    "@vitejs/plugin-vue": "^3.0.1",
+    "gh-pages": "^4.0.0",
+    "vue": "^3.2.41",
+    "vitepress": "latest"
+  }
+}
