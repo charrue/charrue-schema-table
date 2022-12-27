@@ -32,12 +32,19 @@ const tableData = ref([
   },
 ]);
 
+const count = ref(0);
+const onSelection = (selection: any[]) => {
+  count.value = selection.length;
+}
 </script>
 
 <template>
-  <CharrueSchemaTable :data="tableData" :columns="columns">
-    <template #action="scope">
-      <el-button link type="primary">查看{{ scope.row.name }}的详细数据</el-button>
-    </template>
-  </CharrueSchemaTable>
+  <div>
+    <div>选中数量: {{ count }}</div>
+    <CharrueSchemaTable :data="tableData" :columns="columns" selection @selectionChange="onSelection">
+      <template #action="scope">
+        <el-button link type="primary">查看{{ scope.row.name }}的详细数据</el-button>
+      </template>
+    </CharrueSchemaTable>
+  </div>
 </template>

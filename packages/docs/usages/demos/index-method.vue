@@ -32,12 +32,13 @@ const tableData = ref([
   },
 ]);
 
+const indexMethod = (index: number) => {
+  return index * 2
+}
+
 </script>
 
 <template>
-  <CharrueSchemaTable :data="tableData" :columns="columns">
-    <template #action="scope">
-      <el-button link type="primary">查看{{ scope.row.name }}的详细数据</el-button>
-    </template>
+  <CharrueSchemaTable :data="tableData" :columns="columns" :index="indexMethod" :show-extra-column="false">
   </CharrueSchemaTable>
 </template>

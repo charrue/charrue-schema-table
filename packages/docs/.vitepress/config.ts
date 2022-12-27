@@ -10,24 +10,19 @@ const sidebar: DefaultTheme.Config["sidebar"] = [
         text: "介绍",
         link: "/guide/",
       },
+      {
+        text: "用法",
+        link: "/usages/",
+      },
     ],
   },
-  {
-    text: "表单组件",
-    items: [
-      {
-        text: "全部组件",
-        link: "/field/"
-      },
-    ]
-  }
 ];
 
 export default defineConfig({
-  base: "/charrue-schema-form/",
+  base: "/charrue-schema-table/",
   lastUpdated: true,
-  title: "Schema Form",
-  description: "基于Element Plus的增强型的表单组件",
+  title: "Schema Table",
+  description: "基于Element Plus的增强型的表格组件",
   head: [
     [
       "link",
@@ -35,11 +30,11 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
-    logo: "/charrue-schema-form/logo.svg",
+    logo: "/charrue-schema-table/logo.svg",
     nav: [{ text: "开始使用", link: "/guide/" }],
     sidebar,
     socialLinks: [
-      { icon: "github", link: "https://github.com/charrue-schema-form" },
+      { icon: "github", link: "https://github.com/charrue-schema-table" },
     ],
   },
   markdown: {

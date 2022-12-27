@@ -14,8 +14,8 @@ hero:
       link: /guide/
 
 features:
-  - title: 易于扩展的
-    details: 支持自定义组件
+  - title: 基于配置的
+    details: 避免重复编码
     icon: 👐
   - title: 类型提示
     details: TypeScript编写

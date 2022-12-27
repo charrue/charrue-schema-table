@@ -6,8 +6,8 @@
   "license": "MIT",
   "author": "",
   "scripts": {
-    "build": "vite build",
-    "deploy": "gh-pages -d ..vitepress/dist -t true",
+    "build": "vitepress build .",
+    "deploy": "npm run build && gh-pages -d .vitepress/dist -t true",
     "dev": "vitepress dev . --host"
   },
   "devDependencies": {
@@ -16,7 +16,10 @@
     "@ruabick/vitepress-demo-block": "latest",
     "@vitejs/plugin-vue": "^3.0.1",
     "gh-pages": "^4.0.0",
-    "vue": "^3.2.41",
-    "vitepress": "latest"
+    "vitepress": "latest",
+    "vue": "^3.2.41"
+  },
+  "dependencies": {
+    "element-plus": "^2.2.27"
   }
 }

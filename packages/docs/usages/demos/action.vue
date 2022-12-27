@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from "vue"
-import { ElButton } from "element-plus"
 import { CharrueSchemaTable, createColumns } from "@charrue/schema-table-next"
 
 const columns = createColumns([
@@ -31,13 +30,9 @@ const tableData = ref([
     address: 'No. 189, Grove St, Los Angeles',
   },
 ]);
-
 </script>
 
 <template>
-  <CharrueSchemaTable :data="tableData" :columns="columns">
-    <template #action="scope">
-      <el-button link type="primary">查看{{ scope.row.name }}的详细数据</el-button>
-    </template>
+  <CharrueSchemaTable :data="tableData" :columns="columns" :show-extra-column="false">
   </CharrueSchemaTable>
 </template>

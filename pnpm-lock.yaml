@@ -40,9 +40,12 @@ importers:
       '@ruabick/md-demo-plugins': latest
       '@ruabick/vitepress-demo-block': latest
       '@vitejs/plugin-vue': ^3.0.1
+      element-plus: ^2.2.27
       gh-pages: ^4.0.0
       vitepress: latest
       vue: ^3.2.41
+    dependencies:
+      element-plus: registry.npmmirror.com/element-plus/2.2.27_vue@3.2.45
     devDependencies:
       '@charrue/schema-table-next': link:../schema-table-next
       '@ruabick/md-demo-plugins': registry.npmmirror.com/@ruabick/md-demo-plugins/0.3.1
@@ -1631,7 +1634,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: true
 
   registry.npmmirror.com/@vueuse/metadata/9.5.0:
     resolution: {integrity: sha512-4M1AyPZmIv41pym+K5+4wup3bKuYebbH8w8BROY1hmT7rIwcyS4tEL+UsGz0Hiu1FCOxcoBrwtAizc0YmBJjyQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/metadata/-/metadata-9.5.0.tgz}
@@ -1643,7 +1645,6 @@ packages:
     resolution: {integrity: sha512-pgxsUJv/d7IjKpLeB6TthggEsaBwM3ffc5jPrr5TmxAm/fup0mGR5VTzrdA/PSx85tpb+CIvP92D+55qBNc8ag==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/metadata/-/metadata-9.9.0.tgz}
     name: '@vueuse/metadata'
     version: 9.9.0
-    dev: true
 
   registry.npmmirror.com/@vueuse/shared/9.5.0_vue@3.2.45:
     resolution: {integrity: sha512-HnnCWU1Vg9CVWRCcI8ohDKDRB2Sc4bTgT1XAIaoLSfVHHn+TKbrox6pd3klCSw4UDxkhDfOk8cAdcK+Z5KleCA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/shared/-/shared-9.5.0.tgz}
@@ -1667,7 +1668,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-    dev: true
 
   registry.npmmirror.com/acorn-jsx/5.3.2_acorn@8.8.1:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz}
@@ -3096,6 +3096,34 @@ packages:
       '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.189
       '@types/lodash-es': registry.npmmirror.com/@types/lodash-es/4.17.6
       '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.5.0_vue@3.2.45
+      async-validator: registry.npmmirror.com/async-validator/4.2.5
+      dayjs: registry.npmmirror.com/dayjs/1.11.6
+      escape-html: registry.npmmirror.com/escape-html/1.0.3
+      lodash: registry.npmmirror.com/lodash/4.17.21
+      lodash-es: registry.npmmirror.com/lodash-es/4.17.21
+      lodash-unified: registry.npmmirror.com/lodash-unified/1.0.3_3ib2ivapxullxkx3xftsimdk7u
+      memoize-one: registry.npmmirror.com/memoize-one/6.0.0
+      normalize-wheel-es: registry.npmmirror.com/normalize-wheel-es/1.2.0
+      vue: registry.npmmirror.com/vue/3.2.45
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+    dev: false
+
+  registry.npmmirror.com/element-plus/2.2.27_vue@3.2.45:
+    resolution: {integrity: sha512-P04HDOZBYDdvlYuleuCZRULzAc5xJVOBfLDK9xWxVo0vyo8ntdaXS5sTU+/76vrNzuO3FhLn9kvrsbiJEVa1jg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/element-plus/-/element-plus-2.2.27.tgz}
+    id: registry.npmmirror.com/element-plus/2.2.27
+    name: element-plus
+    version: 2.2.27
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@ctrl/tinycolor': registry.npmmirror.com/@ctrl/tinycolor/3.4.1
+      '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.0.10_vue@3.2.45
+      '@floating-ui/dom': registry.npmmirror.com/@floating-ui/dom/1.0.6
+      '@popperjs/core': registry.npmmirror.com/@sxzz/popperjs-es/2.11.7
+      '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.189
+      '@types/lodash-es': registry.npmmirror.com/@types/lodash-es/4.17.6
+      '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.9.0_vue@3.2.45
       async-validator: registry.npmmirror.com/async-validator/4.2.5
       dayjs: registry.npmmirror.com/dayjs/1.11.6
       escape-html: registry.npmmirror.com/escape-html/1.0.3
