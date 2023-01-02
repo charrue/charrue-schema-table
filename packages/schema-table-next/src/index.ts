@@ -10,3 +10,4 @@ const plugin: Plugin = {
 export default plugin;
 export * from "./helper";
 export { CharrueSchemaTable, TABLE_INDEX_KEY };
+export type { ColumnSchema, ColumnSchemaVO, TableData } from "./props";

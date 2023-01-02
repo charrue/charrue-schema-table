@@ -134,5 +134,3 @@ export const multiColumnProps = {
     },
   },
 };
-
-export type SchemaTableProps = typeof schemaTableProps;
