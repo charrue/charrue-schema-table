@@ -16,29 +16,28 @@ const SchemaTable = defineComponent({
   name: "CharrueSchemaTable",
   props: schemaTableProps,
   emits: [
-    "update:current-page",
-    "update:page-size",
-    "size-change",
-    "current-change",
-    "prev-click",
-    "next-click",
+    "update:currentPage",
+    "update:pageSize",
+    "sizeChange",
+    "currentChange",
+    "prevClick",
+    "nextClick",
     "select",
-    "select-all",
-    "selection-change",
-    "cell-mouse-enter",
-    "cell-mouse-leave",
-    "cell-click",
-    "cell-dblclick",
-    "row-click",
-    "row-contextmenu",
-    "row-dblclick",
-    "header-click",
-    "header-contextmenu",
-    "sort-change",
-    "filter-change",
-    "current-change",
-    "header-dragend",
-    "expand-change",
+    "selectAll",
+    "selectionChange",
+    "cellMouseEnter",
+    "cellMouseLeave",
+    "cellClick",
+    "cellDblclick",
+    "rowClick",
+    "rowContextmenu",
+    "rowDblclick",
+    "headerClick",
+    "headerContextmenu",
+    "sortChange",
+    "filterChange",
+    "headerDragend",
+    "expandChange",
   ],
   setup(props, { emit, expose, attrs }) {
     const elTableRef = ref();
@@ -108,10 +107,10 @@ const SchemaTable = defineComponent({
         }
 
         allSelection = cachedSelectionData.flat(1);
-        emit("selection-change", currentSelections, allSelection);
+        emit("selectionChange", currentSelections, allSelection);
         paginationChanged = false;
       } else {
-        emit("selection-change", currentSelections, []);
+        emit("selectionChange", currentSelections, []);
       }
     };
 
@@ -121,11 +120,11 @@ const SchemaTable = defineComponent({
         innerCurrentPage.value = page;
         restoreSelection();
       }
-      emit("current-change", page);
+      emit("currentChange", page);
     };
     const onCurrentPageUpdate = (page: number) => {
       innerCurrentPage.value = page;
-      emit("update:current-page", page);
+      emit("update:currentPage", page);
     };
 
     const onPageSizeChange = (size: number) => {
@@ -151,19 +150,19 @@ const SchemaTable = defineComponent({
         restoreSelection();
       }
 
-      emit("size-change", innerPageSize.value);
-      emit("current-change", innerCurrentPage.value);
+      emit("sizeChange", innerPageSize.value);
+      emit("currentChange", innerCurrentPage.value);
     };
     const onPageSizeUpdate = (size: number) => {
       innerPageSize.value = size;
-      emit("update:page-size", size);
+      emit("update:pageSize", size);
     };
 
     const onPrevClick = (page: number) => {
-      emit("prev-click", page);
+      emit("prevClick", page);
     };
     const onNextClick = (page: number) => {
-      emit("next-click", page);
+      emit("nextClick", page);
     };
 
     const elTableEvents = computed(() => {
@@ -252,7 +251,7 @@ const SchemaTable = defineComponent({
                 data: this.computedTableData,
                 ...this.tableProps,
                 ...this.elTableEvents,
-                "onSelection-change": this.onSelectionChange,
+                onSelectionChange: this.onSelectionChange,
               },
               {
                 default: () => {
