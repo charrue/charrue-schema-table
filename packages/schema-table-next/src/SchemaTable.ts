@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { ref, computed, defineComponent, h, nextTick } from "vue";
 import { ElTable, ElPagination } from "element-plus";
 import { schemaTableProps, TableData } from "./props";
@@ -11,34 +13,35 @@ import {
 } from "./render-components";
 
 export const TABLE_INDEX_KEY = "__INDEX__";
+type Row = Record<string, any>;
 
 const SchemaTable = defineComponent({
   name: "CharrueSchemaTable",
   props: schemaTableProps,
-  emits: [
-    "update:currentPage",
-    "update:pageSize",
-    "sizeChange",
-    "currentChange",
-    "prevClick",
-    "nextClick",
-    "select",
-    "selectAll",
-    "selectionChange",
-    "cellMouseEnter",
-    "cellMouseLeave",
-    "cellClick",
-    "cellDblclick",
-    "rowClick",
-    "rowContextmenu",
-    "rowDblclick",
-    "headerClick",
-    "headerContextmenu",
-    "sortChange",
-    "filterChange",
-    "headerDragend",
-    "expandChange",
-  ],
+  emits: {
+    select: (selection: Row[], row: Row) => true,
+    selectAll: (selection: Row[]) => true,
+    selectionChange: (selection: Row[], allSelection: Row[]) => true,
+    cellMouseEnter: (row: Row, column: any, cell: any, event: Event) => true,
+    cellMouseLeave: (row: Row, column: any, cell: any, event: Event) => true,
+    cellClick: (row: Row, column: any, cell: any, event: Event) => true,
+    cellDblclick: (row: Row, column: any, cell: any, event: Event) => true,
+    rowClick: (row: Row, column: any, event: Event) => true,
+    rowContextmenu: (row: Row, column: any, event: Event) => true,
+    rowDblclick: (row: Row, column: any, event: Event) => true,
+    headerClick: (column: any, event: Event) => true,
+    headerContextmenu: (column: any, event: Event) => true,
+    sortChange: (column: any, prop: string, order: string) => true,
+    filterChange: (filters: any, column: any) => true,
+    headerDragend: (newWidth: number, oldWidth: number, column: any, event: Event) => true,
+    expandChange: (row: Row, expanded: boolean) => true,
+    currentChange: (currentPage: number) => true,
+    sizeChange: (pageSize: number) => true,
+    prevClick: (currentPage: number) => true,
+    nextClick: (currentPage: number) => true,
+    "update:currentPage": (currentPage: number) => true,
+    "update:pageSize": (pageSize: number) => true,
+  },
   setup(props, { emit, expose, attrs }) {
     const elTableRef = ref();
 
