@@ -21,9 +21,12 @@ export const renderIndex = (options: {
           ...(columnProps || {}),
         },
         {
-          header: () => [
-            label ? h("span", null, label) : null,
-            $slots["index-header"] ? $slots["index-header"]() : null,
+          header: (scope: any) => [
+            $slots["index-header"]
+              ? $slots["index-header"](scope)
+              : label
+              ? h("span", null, label)
+              : null,
           ],
         },
       )
@@ -75,13 +78,13 @@ export const renderExpandColumn = (options: {
           type: "expand",
         },
         {
-          header: () => {
+          header: (scope: any) => {
             if (label) {
               return h("span", null, label);
             }
 
             if (!label && $slots["expand-header"]) {
-              return $slots["expand-header"]?.();
+              return $slots["expand-header"]?.(scope);
             }
             return null;
           },
@@ -105,7 +108,8 @@ export const renderColumn = (options: { columns: ColumnSchema[]; $slots: Record<
         ...(item.uiProps || {}),
       },
       {
-        header: () => {
+        header: (scope: any) => {
+          // 多级表头
           if (Array.isArray(item.children) && item.children.length > 0) {
             return item.children.map((child, i) => {
               return h(MultiColumn, {
@@ -117,9 +121,10 @@ export const renderColumn = (options: { columns: ColumnSchema[]; $slots: Record<
               });
             });
           }
+          // 表头动态插槽名
           const propHeaderKey = `header:${item.prop}`;
           if ($slots[propHeaderKey]) {
-            return $slots[propHeaderKey]?.(item);
+            return $slots[propHeaderKey]?.(scope);
           }
 
           return h("span", null, item.label);
@@ -130,7 +135,11 @@ export const renderColumn = (options: { columns: ColumnSchema[]; $slots: Record<
             {
               class: "cell-wrapper",
             },
-            [$slots[item.prop] ? $slots[item.prop]?.() : h("span", null, scope.row[item.prop])],
+            [
+              $slots[item.prop]
+                ? $slots[item.prop]?.(scope)
+                : h("span", null, scope.row[item.prop]),
+            ],
           );
         },
       },
