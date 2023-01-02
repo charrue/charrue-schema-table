@@ -2,7 +2,7 @@ import { h } from "vue";
 import { ElTableColumn } from "element-plus";
 import MultiColumn from "./MultiColumn";
 
-import { ElTableColumnProps, ColumnSchema } from "./props";
+import { ElTableColumnProps, ColumnSchemaVO } from "./props";
 
 export const renderIndex = (options: {
   index: ElTableColumnProps["index"] | boolean;
@@ -48,7 +48,7 @@ export const renderExtraColumn = (options: {
             : h("span", null, label);
         },
         default: (scope: any) => {
-          return $slots.action ? $slots.action?.(scope) : null;
+          return $slots.actions ? $slots.actions?.(scope) : null;
         },
       })
     : null;
@@ -96,9 +96,15 @@ export const renderExpandColumn = (options: {
     : null;
 };
 
-export const renderColumn = (options: { columns: ColumnSchema[]; $slots: Record<string, any> }) => {
+export const renderColumn = (options: {
+  columns: ColumnSchemaVO[];
+  $slots: Record<string, any>;
+}) => {
   const { columns = [], $slots = {} } = options;
-  return columns.map((item, idx) => {
+  const visibleColumns = columns.filter((item) => {
+    return item.hidden !== true;
+  });
+  return visibleColumns.map((item, idx) => {
     return h(
       ElTableColumn,
       {

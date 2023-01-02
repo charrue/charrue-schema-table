@@ -20,6 +20,11 @@ export interface ColumnSchema {
   children?: ColumnSchema[];
 }
 
+export interface ColumnViewObject {
+  hidden?: boolean;
+}
+export interface ColumnSchemaVO extends ColumnSchema, ColumnViewObject {}
+
 export type TableData = Record<string, any>;
 
 export const schemaTableProps = {
@@ -30,7 +35,7 @@ export const schemaTableProps = {
     },
   },
   columns: {
-    type: Array as PropType<ColumnSchema[]>,
+    type: Array as PropType<ColumnSchemaVO[]>,
     default() {
       return [];
     },
