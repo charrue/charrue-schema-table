@@ -1,6 +1,6 @@
 {
   "name": "@charrue/schema-table-next",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "基于vue3与element-plus的表格组件封装",
   "keywords": [
     "charrue",
